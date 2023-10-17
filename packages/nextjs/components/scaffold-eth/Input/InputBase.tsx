@@ -21,7 +21,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   if (error) {
     modifier = "border-error";
   } else if (disabled) {
-    modifier = "border-disabled bg-base-300";
+    modifier = "border-disabled bg-muted";
   }
 
   const handleChange = useCallback(
@@ -32,10 +32,10 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   );
 
   return (
-    <div className={`flex border-2 border-base-300 bg-base-200 rounded-full text-accent ${modifier}`}>
+    <div className={`flex border-2 border-muted bg-muted rounded-full text-accent ${modifier}`}>
       {prefix}
       <input
-        className="input input-ghost focus:outline-none focus:bg-transparent focus:text-secondary-content h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-secondary-content"
+        className="input input-muted focus:outline-none focus:text-secondary-content h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-secondary-content"
         placeholder={placeholder}
         name={name}
         value={value?.toString()}

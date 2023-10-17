@@ -14,9 +14,6 @@ contract YourContract is Ownable{
     mapping (uint => uint) nftTradingVolume;
     mapping (address => uint) userTradingVolume;
 
-    struct Collection{
-        
-    }
 
 	constructor(address _collectionAddress, uint256 _floorPrice ) {
         collectionAddress = _collectionAddress;

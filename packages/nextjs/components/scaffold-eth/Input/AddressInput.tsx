@@ -61,7 +61,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       disabled={isEnsAddressLoading || isEnsNameLoading || disabled}
       prefix={
         ensName && (
-          <div className="flex bg-base-300 rounded-l-full items-center">
+          <div className="flex bg-muted rounded-l-full items-center">
             {ensAvatar ? (
               <span className="w-[35px]">
                 {
@@ -70,7 +70,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
                 }
               </span>
             ) : null}
-            <span className="text-accent px-2">{enteredEnsName ?? ensName}</span>
+            <span className="text-foreground px-2">{enteredEnsName ?? ensName}</span>
           </div>
         )
       }

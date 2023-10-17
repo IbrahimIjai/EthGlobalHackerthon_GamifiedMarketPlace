@@ -14,8 +14,8 @@ type MetaHeaderProps = {
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
 
 export const MetaHeader = ({
-  title = "Challenge {challengeNum} | SpeedRunEthereum",
-  description = "Challenge {challengeNum} of SpeedRunEthereum. Built with 🏗 Scaffold-ETH 2",
+  title = "Martian Mosaic",
+  description = "Discover a cosmic treasure trove of Martian-themed NFT art and collectibles. Explore the Red Planet's artistic wonders and own a piece of the Martian mystique. Join our MarsMarket and embark on a journey into the world of rare and unique digital creations.",
   image = "thumbnail.jpg",
   twitterCard = "summary_large_image",
   children,

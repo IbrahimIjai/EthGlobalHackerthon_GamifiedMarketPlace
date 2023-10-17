@@ -13,7 +13,7 @@ type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bot
 
 type TNotificationProps = {
   content: React.ReactNode;
-  status: "success" | "info" | "loading" | "error" | "warning";
+  status: "success" | "primary" | "loading" | "error" | "warning";
   duration?: number;
   icon?: string;
   position?: TPositions;
@@ -76,13 +76,13 @@ export const notification = {
     return Notification({ content, status: "success", ...options });
   },
   info: (content: React.ReactNode, options?: NotificationOptions) => {
-    return Notification({ content, status: "info", ...options });
+    return Notification({ content, status: "primary", ...options });
   },
   warning: (content: React.ReactNode, options?: NotificationOptions) => {
     return Notification({ content, status: "warning", ...options });
   },
   error: (content: React.ReactNode, options?: NotificationOptions) => {
-    return Notification({ content, status: "error", ...options });
+    return Notification({ content, status: "destructive", ...options });
   },
   loading: (content: React.ReactNode, options?: NotificationOptions) => {
     return Notification({ content, status: "loading", ...options });

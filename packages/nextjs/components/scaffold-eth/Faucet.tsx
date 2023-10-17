@@ -38,11 +38,11 @@ export const Faucet = () => {
           <>
             <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
             <p className="m-0">
-              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
+              - Did you forget to run <code className="italic bg-muted text-base font-bold">yarn chain</code> ?
             </p>
             <p className="mt-1 break-normal">
-              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
-              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
+              - Or you can change <code className="italic bg-muted text-base font-bold">targetNetwork</code> in{" "}
+              <code className="italic bg-muted text-base font-bold">scaffold.config.ts</code>
             </p>
           </>,
         );
@@ -82,17 +82,17 @@ export const Faucet = () => {
 
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full font-normal normal-case">
+      <label htmlFor="faucet-modal" className="btn btn-[#2563eb] btn-sm px-2 rounded-full font-normal normal-case">
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
       <input type="checkbox" id="faucet-modal" className="modal-toggle" />
       <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative">
+        <label className="bg-muted rounded-md shadow-md p-12 relative">
           {/* dummy input to capture event onclick on modal box */}
-          <input className="h-0 w-0 absolute top-0 left-0" />
+          <input className="h-0 w-0  absolute top-0 left-0" />
           <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
-          <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
+          <label htmlFor="faucet-modal" className="btn  btn-sm btn-circle absolute right-3 top-3">
             ✕
           </label>
           <div className="space-y-3">
