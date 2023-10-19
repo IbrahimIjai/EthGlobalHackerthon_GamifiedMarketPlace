@@ -5,7 +5,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract YourContract is Ownable{
+contract Martian is Ownable{
 	// State Variables
 	address public immutable collectionAddress;
     uint256 floorPrice;
@@ -19,8 +19,6 @@ contract YourContract is Ownable{
         collectionAddress = _collectionAddress;
         floorPrice = _floorPrice;
 	}
-
-
 
     function List (uint256 _price, uint256 nftId) public {
 

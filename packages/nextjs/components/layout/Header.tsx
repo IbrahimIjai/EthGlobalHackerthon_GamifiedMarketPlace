@@ -15,8 +15,8 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
       href={href}
       passHref
       className={`${
-        isActive ? "bg-secondary shadow-sm" : ""
-      } hover:bg-secondary hover:shadow-sm focus:!bg-secondary py-1.5 px-3 text-sm rounded-md gap-2`}
+        isActive ? "bg-muted shadow-sm" : ""
+      } hover:bg-muted hover:shadow-sm py-1.5 px-3 text-sm rounded-md gap-2`}
     >
       {children}
     </Link>
@@ -37,15 +37,15 @@ export const Header = () => {
   const navLinks = (
     <>
       <li>
-        <NavLink href="/">Explore</NavLink>
-      </li>
-      <li>
         <NavLink href="/collections">Collections</NavLink>
       </li>
       <li>
-        <NavLink href="/collections">Launchpad</NavLink>
+        <NavLink href="/launchpad">Launchpad</NavLink>
       </li>
       <li>
+        <NavLink href="/airdrops">Airdrop</NavLink>
+      </li>
+      {/* <li>
         <NavLink href="/debug">
           <BugAntIcon className="w-4 h-4" />
           Debug Contracts
@@ -56,7 +56,7 @@ export const Header = () => {
           <MagnifyingGlassIcon className="w-4 h-4" />
           Block Explorer
         </NavLink>
-      </li>
+      </li> */}
     </>
   );
 
@@ -64,15 +64,15 @@ export const Header = () => {
     <div className="sticky top-0 z-20 justify-between flex-shrink-0 min-h-0 px-0 shadow-md lg:static navbar bg-primary shadow-secondary sm:px-2">
       <div className="w-auto navbar-start lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
-          <label
+          <div
             tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+            className={`ml-1 bg-slate-50 text-foreground ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
               setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
             }}
           >
-            <Bars3Icon className="h-1/2" />
-          </label>
+            <Bars3Icon className="text-red-200 h-1/2" />
+          </div>
           {isDrawerOpen && (
             <ul
               tabIndex={0}
@@ -91,9 +91,9 @@ export const Header = () => {
             <span className="text-[0.9rem] -mt-2">Market</span>
           </div>
         </Link>
-        <ul className="hidden gap-2 px-1 lg:flex lg:flex-nowrap menu menu-horizontal">{navLinks}</ul>
+        <ul className="flex-row hidden gap-2 px-1 lg:flex lg:flex-nowrap">{navLinks}</ul>
       </div>
-      <div className="flex-grow mr-4 navbar-end">
+      <div className="justify-end flex-grow w-1/2 mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
       </div>
