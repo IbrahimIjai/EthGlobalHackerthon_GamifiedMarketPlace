@@ -7,7 +7,6 @@ const Home: NextPage = () => {
     <>
       <MetaHeader />
       <Heros/>
-      
     </>
   );
 };

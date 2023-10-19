@@ -5,8 +5,8 @@ const boredape = {
   contract: "",
   twitter: "",
   bannerImage: "https://martianmosaic.vercel.app/assets/collectionsbanner/boredape.webp",
-  name: "BAYC",
-  symbol: "BoredApeYachtClub",
+  name: "Bored Ape YachtClub",
+  symbol: "BAYC",
   totalItems: "15",
   tokens: [
     {

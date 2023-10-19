@@ -4,6 +4,7 @@ import { useAccount, useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
+import { Button } from "../ui/Buttons";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -57,13 +58,13 @@ export const FaucetButton = () => {
       }
       data-tip="Grab funds from faucet"
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+      <Button className="px-2 rounded-full" onClick={sendETH} disabled={loading}>
         {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
+          <BanknotesIcon className="w-4 h-4" />
         ) : (
           <span className="loading loading-spinner loading-xs"></span>
         )}
-      </button>
+      </Button>
     </div>
   );
 };

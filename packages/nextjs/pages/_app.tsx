@@ -42,11 +42,11 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
           avatar={BlockieAvatar}
           theme={isDarkTheme ? darkTheme() : lightTheme()}
         >
-          <div className="flex flex-col min-h-screen font-space-grotesk">
+          <div className="relative flex flex-col min-h-screen px-4">
             <Header />
-            <main className="relative flex flex-col flex-1">
-              <Component {...pageProps} />
-            </main>
+            <div className="min-h-screen mt-[2rem]">
+            <Component {...pageProps} />
+            </div>
             <Footer />
           </div>
           <Toaster />

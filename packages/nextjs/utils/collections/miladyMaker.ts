@@ -6,8 +6,8 @@ const miladyMaker = {
     contract: "",
     twitter: "",
     bannerImage: "https://martianmosaic.vercel.app/assets/collectionsbanner/milady.webp",
-    name: "PPG ",
-    symbol: "PudgyPenguins ",
+    name: "Milady Maker",
+    symbol: "MLM",
     totalItems: "10",
     tokens:[
       {

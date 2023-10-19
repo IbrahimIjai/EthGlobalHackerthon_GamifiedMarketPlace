@@ -1,17 +1,6 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-/* :root,
-[data-theme] {
-  background: hsl(var(--b2));
-} */
-
-
-/* primary #2563eb
-muted ligt 	#f1f5f9
-muted dark 	#94a3b8
- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
@@ -23,7 +12,7 @@ muted dark 	#94a3b8
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 210 40% 89.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -36,7 +25,7 @@ muted dark 	#94a3b8
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.3rem;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -46,7 +35,7 @@ muted dark 	#94a3b8
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 217.2 32.6% 15.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -60,37 +49,33 @@ muted dark 	#94a3b8
   }
 }
 
-
-
-body {
-  min-height: 100vh;
-}
-
 h1,
 h2,
 h3,
 h4 {
-  margin-bottom: 0.5rem;
-  line-height: 1;
 }
 
 p {
-  margin: 1rem 0;
+ 
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: Inter, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+      Helvetica Neue, sans-serif;
   }
 }
-/* .btn {
-  @apply shadow-md;
-}
 
-.btn.btn-ghost {
-  @apply shadow-none;
-} */
+.opagbg {
+  background: rgba(46, 49, 57, 0.78);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border: 1px solid rgba(46, 49, 57, 0.3);
+}
+.easytransition{
+  @apply transition-all ease-in-out;
+  transition-duration: 1200ms;
+}

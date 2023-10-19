@@ -61,30 +61,9 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky top-0 z-20 justify-between flex-shrink-0 min-h-0 px-0 shadow-md lg:static navbar bg-primary shadow-secondary sm:px-2">
-      <div className="w-auto navbar-start lg:w-1/2">
-        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
-          <div
-            tabIndex={0}
-            className={`ml-1 bg-slate-50 text-foreground ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
-            onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
-            }}
-          >
-            <Bars3Icon className="text-red-200 h-1/2" />
-          </div>
-          {isDrawerOpen && (
-            <ul
-              tabIndex={0}
-              className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-primary rounded-box w-52"
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              {navLinks}
-            </ul>
-          )}
-        </div>
+    <div className="fixed top-0 z-20 w-full px-2 shadow-md bg-background shadow-secondary">
+      <div className="relative flex justify-between w-full min-h-0 px-0 py-4 sm:px-2">
+      <div className="flex w-auto gap-3 item-center lg:w-1/2">
         <Link href="/" passHref className="items-center hidden gap-2 ml-4 mr-[5rem] lg:flex shrink-0">
           <div className="flex flex-col item-center h-[2rem]">
             <span className="text-xl font-bold">MARTIAN</span>
@@ -93,10 +72,35 @@ export const Header = () => {
         </Link>
         <ul className="flex-row hidden gap-2 px-1 lg:flex lg:flex-nowrap">{navLinks}</ul>
       </div>
-      <div className="justify-end flex-grow w-1/2 mr-4">
+      <div className="relative flex justify-end flex-grow w-1/2 gap-2 mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
+      </div>
       </div>
     </div>
   );
 };
+
+
+{/* <div className="lg:hidden dropdown" ref={burgerMenuRef}>
+<div
+  tabIndex={0}
+  className={`ml-1 bg-slate-50 text-foreground ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+  onClick={() => {
+    setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
+  }}
+>
+  <Bars3Icon className="text-red-200 h-1/2" />
+</div>
+{isDrawerOpen && (
+  <ul
+    tabIndex={0}
+    className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-primary rounded-box w-52"
+    onClick={() => {
+      setIsDrawerOpen(false);
+    }}
+  >
+    {navLinks}
+  </ul>
+)}
+</div> */}

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 import { CommonInputProps, InputBase, SIGNED_NUMBER_REGEX } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
+import { Button } from "~~/components/ui/Buttons";
 
 const MAX_DECIMALS_USD = 2;
 
@@ -97,15 +98,15 @@ export const EtherInput = ({ value, name, placeholder, onChange, disabled }: Com
       placeholder={placeholder}
       onChange={handleChangeNumber}
       disabled={disabled}
-      prefix={<span className="pl-4 -mr-2 text-accent self-center">{usdMode ? "$" : "Ξ"}</span>}
+      prefix={<span className="self-center pl-4 -mr-4 text-lg text-accent">{usdMode ? "$" : "Ξ"}</span>}
       suffix={
-        <button
-          className={`btn btn-primary h-[2.2rem] min-h-[2.2rem] ${nativeCurrencyPrice > 0 ? "" : "hidden"}`}
+        <Button
+          className={` ${nativeCurrencyPrice > 0 ? "" : "hidden"}`}
           onClick={toggleMode}
           disabled={!usdMode && !nativeCurrencyPrice}
         >
-          <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-        </button>
+          <ArrowsRightLeftIcon className="w-6 h-6 cursor-pointer" aria-hidden="true" />
+        </Button>
       }
     />
   );

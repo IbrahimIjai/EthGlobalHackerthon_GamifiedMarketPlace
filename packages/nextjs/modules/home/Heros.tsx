@@ -11,28 +11,31 @@ import { collections } from "~~/utils/collections";
 
 export default function Heros() {
   return (
-    <section className="w-screen">
-      <Swiper
-        modules={[A11y, Autoplay, Pagination]}
-        pagination={{
-          clickable: true,
-        }}
-        loop
-        slidesPerView={1}
-        autoplay={{
-          delay: 5000,
-          pauseOnMouseEnter: true,
-          disableOnInteraction: false,
-        }}
-      >
-        {collections.map((collection, i) => {
-          return (
-            <SwiperSlide key={i}>
-              <CollectionBill image={collection.bannerImage} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-    </section>
+    <Swiper
+      modules={[A11y, Autoplay, Pagination]}
+      pagination={{
+        clickable: true,
+      }}
+      loop
+      slidesPerView={1}
+      autoplay={{
+        delay: 6000,
+        pauseOnMouseEnter: true,
+        disableOnInteraction: false,
+      }}
+    >
+      {collections.map((collection, i) => {
+        return (
+          <SwiperSlide key={i}>
+            <CollectionBill
+              image={collection.bannerImage}
+              collectionName={collection.name}
+              contractAddress={collection.contract}
+              description={collection.description}
+            />
+          </SwiperSlide>
+        );
+      })}
+    </Swiper>
   );
 }

@@ -6,8 +6,8 @@ const puddyPenguins = {
     contract: "",
     twitter: "",
     bannerImage: "https://martianmosaic.vercel.app/assets/collectionsbanner/puddypeguin.webp",
-    name: "PPG ",
-    symbol: "PudgyPenguins ",
+    name: "Pudgy Penguins ",
+    symbol: "PPG",
     totalItems: "10",
     tokens:[
         {

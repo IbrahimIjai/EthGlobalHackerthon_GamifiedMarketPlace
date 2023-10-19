@@ -1,14 +1,14 @@
 import { useEffect } from "react";
+import { Label } from "~~/components/ui/Label";
+import { Switch } from "~~/components/ui/Switch";
+import { useTheme } from "next-themes";
 import { useDarkMode, useIsMounted } from "usehooks-ts";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { useTheme } from "next-themes"
 
 export const SwitchTheme = ({ className }: { className?: string }) => {
-  // const { isDarkMode, toggle } = useDarkMode();
   const isMounted = useIsMounted();
 
-
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   // useEffect(() => {
   //   const body = document.body;
@@ -17,26 +17,21 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
 
   const toggleTheme = () => {
     if (theme === "light") {
-      setTheme("dark")
+      setTheme("dark");
     } else {
-      setTheme("light")
+      setTheme("light");
     }
-  }
+  };
 
   return (
     <div className={`flex space-x-2 text-sm ${className}`}>
-      <input
-        id="theme-toggle"
-        type="checkbox"
-        className="toggle toggle-[#2563eb] bg-muted"
-        onChange={toggleTheme}
-        checked={theme === "dark"}
-      />
-      {isMounted() && (
-        <label htmlFor="theme-toggle" className={`swap swap-rotate ${theme !== "dark" ? "swap-active" : ""}`}>
-          <SunIcon className="swap-on h-5 w-5" />
-          <MoonIcon className="swap-off h-5 w-5" />
-        </label>
+      <div className="flex items-center space-x-2">
+        <Switch id="theme" onCheckedChange={toggleTheme} checked={theme === "dark"} />
+      </div>
+      {isMounted() && theme !== "dark" ? (
+        <MoonIcon className="w-5 h-5 swap-off" />
+      ) : (
+        <SunIcon className="w-5 h-5 swap-on" />
       )}
     </div>
   );
