@@ -1,7 +1,8 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import MobileMenu from "./MobileMenu";
 import { Bars3Icon, BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -34,6 +35,20 @@ export const Header = () => {
     useCallback(() => setIsDrawerOpen(false), []),
   );
 
+  const divRef = useRef<HTMLDivElement>(null);
+  const [marginTop, setMarginTop] = useState(0);
+  // useEffect(() => {
+  //   const divElement = divRef.current;
+
+  //   if (divElement) {
+  //     const rect = divElement?.getBoundingClientRect();
+  //     const topDistance = rect.top + window.scrollY;
+  //     const height = divElement.offsetHeight;
+  //     setMarginTop(topDistance + height);
+  //     console.log("height header", height);
+  //   }
+  // }, [marginTop]);
+
   const navLinks = (
     <>
       <li>
@@ -61,28 +76,31 @@ export const Header = () => {
   );
 
   return (
-    <div className="fixed top-0 z-20 w-full px-2 shadow-md bg-background shadow-secondary">
+    <div ref={divRef} className="fixed top-0 z-20 h-[60px] w-full px-2 shadow-md bg-background shadow-secondary">
       <div className="relative flex justify-between w-full min-h-0 px-0 py-4 sm:px-2">
-      <div className="flex w-auto gap-3 item-center lg:w-1/2">
-        <Link href="/" passHref className="items-center hidden gap-2 ml-4 mr-[5rem] lg:flex shrink-0">
-          <div className="flex flex-col item-center h-[2rem]">
-            <span className="text-xl font-bold">MARTIAN</span>
-            <span className="text-[0.9rem] -mt-2">Market</span>
+        <div className="flex w-auto gap-3 item-center lg:w-1/2">
+          <Link href="/" passHref className="items-center hidden gap-2 ml-4 mr-[5rem] lg:flex shrink-0">
+            <div className="flex flex-col item-center h-[2rem]">
+              <span className="text-xl font-bold">MARTIAN</span>
+              <span className="text-[0.9rem] -mt-2">Market</span>
+            </div>
+          </Link>
+          <ul className="flex-row hidden gap-2 px-1 lg:flex lg:flex-nowrap">{navLinks}</ul>
+        </div>
+        <div className="relative flex justify-end flex-grow w-1/2 gap-2 mr-4">
+          <RainbowKitCustomConnectButton />
+          <FaucetButton />
+          <div className="lg:hidden">
+            <MobileMenu />
           </div>
-        </Link>
-        <ul className="flex-row hidden gap-2 px-1 lg:flex lg:flex-nowrap">{navLinks}</ul>
-      </div>
-      <div className="relative flex justify-end flex-grow w-1/2 gap-2 mr-4">
-        <RainbowKitCustomConnectButton />
-        <FaucetButton />
-      </div>
+        </div>
       </div>
     </div>
   );
 };
 
-
-{/* <div className="lg:hidden dropdown" ref={burgerMenuRef}>
+{
+  /* <div className="lg:hidden dropdown" ref={burgerMenuRef}>
 <div
   tabIndex={0}
   className={`ml-1 bg-slate-50 text-foreground ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
@@ -103,4 +121,5 @@ export const Header = () => {
     {navLinks}
   </ul>
 )}
-</div> */}
+</div> */
+}

@@ -20,7 +20,7 @@ export default function CollectionBill({
   const words = description.split(" ");
   const remainingWords = words.slice(0, 12).join(" ");
   return (
-    <div className="relative w-full lg:w-[96%] rounded-xl overflow-hidden h-[300px] lg:h-[380px] lg:mx-8">
+    <div className="relative w-full lg:w-[96%] rounded-xl overflow-hidden h-[300px] lg:h-[380px] lg:mx-3">
       <Image src={image} alt="NFT Image" fill className="object-cover min-w-full cursor-pointer" />
       <Link href={`/collection/${contractAddress}`}
         className="absolute backdrop-blur-[2px]  rounded-[.8rem] 

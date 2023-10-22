@@ -53,6 +53,10 @@ h1,
 h2,
 h3,
 h4 {
+
+}
+.title_h1{
+  @apply whitespace-nowrap  font-bold text-3xl;
 }
 
 p {
@@ -68,7 +72,7 @@ p {
 }
 
 .opagbg {
-  background: rgba(46, 49, 57, 0.78);
+  background: rgba(46, 49, 57, 0.48);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8.9px);

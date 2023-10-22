@@ -12,11 +12,10 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  */
 export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
-
   return (
-    <div className="min-h-0 px-1 py-5 mb-11 lg:mb-0">
-      <div className="z-10 flex items-center justify-between w-full p-4 pointer-events-none ottom-0 ">
-        <div className="flex space-x-2 pointer-events-auto">
+    <div className=" flex items-start justify-between w-full px-8 py-8 mt-6 ">
+      <div className="flex flex-col gap-8 items-start ">
+        <div className="flex space-x-2">
           {nativeCurrencyPrice > 0 && (
             <Button className="gap-0 font-normal border-none cursor-auto bg-primary btn-sm">
               <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
@@ -30,7 +29,7 @@ export const Footer = () => {
             <div className="flex items-center justify-center w-full gap-2 text-sm">
               <div>
                 <p className="m-0 text-center">
-                  Built with <HeartIcon className="inline-block w-4 h-4" /> at 🏰{" "}
+                  Built with <HeartIcon className="inline-block w-4 h-4" /> with 🏰{" "}
                   <a
                     href="https://github.com/scaffold-eth/scaffold-eth-2/"
                     target="_blank"
@@ -55,8 +54,8 @@ export const Footer = () => {
             </div>
           </ul>
         </div>
-        <SwitchTheme className="pointer-events-auto" />
       </div>
+      <SwitchTheme className="" />
     </div>
   );
 };

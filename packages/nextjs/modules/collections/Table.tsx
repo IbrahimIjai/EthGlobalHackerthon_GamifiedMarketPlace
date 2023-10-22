@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Row } from "@tanstack/react-table";
+import { useNetwork } from "wagmi";
 import { DataTable } from "~~/components/datatable";
 import { Button } from "~~/components/ui/Buttons";
 import { Label } from "~~/components/ui/Label";
@@ -8,18 +9,19 @@ import { RadioGroup, RadioGroupItem } from "~~/components/ui/RadioGroup";
 import { collections } from "~~/utils/collections";
 import { COLLECTION_COLUMN } from "~~/utils/collections/table";
 
-export default function TopCollectionsTable() {
+export default function CollectionPageTable() {
   const router = useRouter();
-
+  const { chain } = useNetwork();
   const handleRowClick = (row: Row<any>) => {
     const _collection = row.original.contract.contract;
     router.push(`/collection/${_collection}`);
   };
   return (
-    <div className="mt-8 mx-3">
+    <div className="mt-12">
+      <h1 className="title_h1">All Collections</h1>
+      <p className="font-bold text-gray-400">Discover NFT collections, ranked by Volume and Sales on {chain ? chain?.name : "Scroll testnet"}</p>
       <div className="">
-        <h1 className="title_h1 ">Real Time Data Tracking</h1>
-        <div className="flex flex-col items-start lg:flex-row lg:items-center justify-between mt-8">
+        <div className="flex flex-col items-start lg:flex-row lg:items-center justify-between mt-8 mb-4">
           <RadioGroup defaultValue="trending" className="flex font-bold border-accent">
             <div>
               <RadioGroupItem value="trending" id="trending" className="peer sr-only" />
@@ -27,7 +29,7 @@ export default function TopCollectionsTable() {
                 htmlFor="trending"
                 className="border border-muted p-2 hover:bg-accent/50 hover:text-accent-foreground peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:bg-primary"
               >
-               🧑🏻‍🚀 Trending
+                🧑🏻‍🚀 Trending
               </Label>
             </div>
             <div>
@@ -45,7 +47,7 @@ export default function TopCollectionsTable() {
                 htmlFor="highestvolume"
                 className="border border-muted p-2 hover:bg-accent/50 hover:text-accent-foreground peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:bg-primary"
               >
-               🏋🏾‍♀️ Highest Volume
+                🏋🏾‍♀️ Highest Volume
               </Label>
             </div>
           </RadioGroup>
@@ -79,11 +81,12 @@ export default function TopCollectionsTable() {
                 </Label>
               </div>
             </RadioGroup>
-            <Button variant="outline">View all</Button>
+            <Button variant="outline">All Chains</Button>
           </div>
         </div>
       </div>
-      <DataTable onNavigateToDynamicPage={handleRowClick} data={collections.slice(0, 4)} columns={COLLECTION_COLUMN} />
+
+      <DataTable onNavigateToDynamicPage={handleRowClick} data={collections} columns={COLLECTION_COLUMN} />
     </div>
   );
 }
