@@ -17,7 +17,7 @@ contract MiladyMaker is ERC721Enumerable, Ownable {
 	using Strings for uint256;
 	string public baseURI;
 	string public baseExtension = ".json";
-	uint256 public cost = 0.5 ether;
+	uint256 public cost = 0 ether;
 	uint256 public maxSupply = 20;
 	uint256 public maxMintAmount = 2;
 	bool public paused = false;

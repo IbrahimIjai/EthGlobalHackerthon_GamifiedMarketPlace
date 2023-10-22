@@ -43,6 +43,8 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		uint256 royaltyFees; //normal intergers, not percentage, eg, 10 for 10%
 		uint256 minPrice;
 		collectionStatus status;
+		uint256 floorPrice;
+		uint256 minLiquidatePoint;
 	}
 
 	EnumerableSet.AddressSet private collections;
@@ -54,6 +56,8 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 	mapping(address => Collection) private collection;
 
 	mapping(address => uint256) private revenue;
+
+	mapping(address => uint256) public userLiqPts;
 
 	//Seller typical activities
 	function list(
@@ -132,20 +136,38 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 			amount
 		);
 		IERC721(_collection).safeTransferFrom(address(this), buyer, _tokenId);
+		userLiqPts[_msgSender()] += 2;
 		emit NFTSold(seller, _collection, buyer, _tokenId, _price);
 	}
+
+	function liquidateNft(
+		address _collection,
+		uint256 _tokenId
+	) private isListed(_collection, _tokenId) isNftOwner(_collection, _tokenId) {
+		
+		uint256 minLiquidationPoint = collection[_collection].minLiquidatePoint;
+		require(userLiqPts[_msgSender()] > minLiquidationPoint, "not enough points");
+		IERC721(_collection).safeTransferFrom(_msgSender(), address(this), _tokenId );
+		userLiqPts[_msgSender()] -= minLiquidationPoint;
+			//function calculate value of points
+		// IERC20(_MMCToken).transfer()
+		emit NFTLiquidated(_msgSender(), _collection, _tokenId);
+	}
+
+
 
 	//admin only
 
 	function addCollection(
-		address _collection,
 		address _collectionAddress,
 		uint256 _royaltyFees,
-		uint256 _minListing
+		uint256 _minListing,
+		uint256 _floorPrice,
+		uint256 _minLiquidatePoint
 	) external whenNotPaused onlyOwner {
-		require(!collections.contains(_collection), "Collection exists");
+		require(!collections.contains(_collectionAddress), "Collection exists");
 		require(
-			IERC721(_collection).supportsInterface(0x80ac58cd),
+			IERC721(_collectionAddress).supportsInterface(0x80ac58cd),
 			"not supported"
 		);
 		require(
@@ -153,21 +175,25 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 				_royaltyFees <= (maxTradeFees - protocolFee),
 			"error inputing fees"
 		);
-		collections.add(_collection);
-		collection[_collection] = Collection(
+		collections.add(_collectionAddress);
+		collection[_collectionAddress] = Collection(
 			_collectionAddress,
 			_royaltyFees,
 			_minListing,
-			collectionStatus.verified
+			collectionStatus.verified,
+			_floorPrice,
+			_minLiquidatePoint
 		);
-		emit CollectionAdded(_collection, _collectionAddress, _royaltyFees);
+		emit CollectionAdded(_collectionAddress, _collectionAddress, _royaltyFees);
 	}
 
 	function updateCollection(
 		address _collection,
 		address _collectionAddress,
 		uint256 _royaltyFees,
-		uint256 _minListing
+		uint256 _minListing,
+		uint256 _floorPrice,
+		uint256 _minLiquidatePoint
 	) external whenNotPaused isSupportedCollection(_collection) onlyOwner {
 		require(
 			_royaltyFees >= minTradeFees &&
@@ -182,7 +208,9 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 			_collectionAddress,
 			_royaltyFees,
 			_minListing,
-			collectionStatus.verified
+			collectionStatus.verified,
+			_floorPrice,
+			_minLiquidatePoint
 		);
 		emit CollectionUpdated(_collection, _collectionAddress, _royaltyFees);
 	}
@@ -318,6 +346,11 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		address indexed buyer,
 		uint256 tokenId,
 		uint256 price
+	);
+	event NFTLiquidated(
+		address indexed seller,
+		address indexed collection,
+		uint256 indexed token
 	);
 	event listingUpdated(
 		address indexed owner,

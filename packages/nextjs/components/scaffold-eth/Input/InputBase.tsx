@@ -1,6 +1,7 @@
 import { ChangeEvent, ReactNode, useCallback } from "react";
 import { CommonInputProps } from "~~/components/scaffold-eth";
 import { Input } from "~~/components/ui/Input";
+
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
   prefix?: ReactNode;
@@ -35,7 +36,6 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
     <div className={`flex items-center  ${modifier}`}>
       {prefix}
       <Input
-        className=" focus:outline-none focus:text-secondary-content h-[2.2rem] min-h-[2.2rem] px-6 border w-full font-medium placeholder:text-accent/50 text-secondary-content"
         placeholder={placeholder}
         name={name}
         value={value?.toString()}

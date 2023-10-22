@@ -1,5 +1,3 @@
-
-
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
@@ -24,7 +22,8 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
   });
 
   // Get the deployed contract
-  // const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  const generalMarket = await hre.ethers.getContract("GeneralMarket", deployer);
+  await generalMarket.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
 };
 
 export default deployGeneralMarket;
