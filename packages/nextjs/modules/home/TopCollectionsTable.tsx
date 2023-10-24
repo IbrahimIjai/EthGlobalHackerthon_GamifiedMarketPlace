@@ -13,7 +13,7 @@ export default function TopCollectionsTable() {
 
   const handleRowClick = (row: Row<any>) => {
     const _collection = row.original.contract.contract;
-    router.push(`/collection/${_collection}`);
+    router.push(`/collections/${_collection}`);
   };
   return (
     <div className="mt-8 mx-3">
@@ -27,7 +27,7 @@ export default function TopCollectionsTable() {
                 htmlFor="trending"
                 className="border border-muted p-2 hover:bg-accent/50 hover:text-accent-foreground peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:bg-primary"
               >
-               🧑🏻‍🚀 Trending
+                🧑🏻‍🚀 Trending
               </Label>
             </div>
             <div>
@@ -45,7 +45,7 @@ export default function TopCollectionsTable() {
                 htmlFor="highestvolume"
                 className="border border-muted p-2 hover:bg-accent/50 hover:text-accent-foreground peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:bg-primary"
               >
-               🏋🏾‍♀️ Highest Volume
+                🏋🏾‍♀️ Highest Volume
               </Label>
             </div>
           </RadioGroup>

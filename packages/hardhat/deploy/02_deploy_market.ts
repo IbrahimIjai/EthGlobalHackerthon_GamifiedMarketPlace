@@ -23,6 +23,19 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
 
   // Get the deployed contract
   const generalMarket = await hre.ethers.getContract("GeneralMarket", deployer);
+  const boredApeYachtClub = await hre.ethers.getContract("BoredApeYachtClub", deployer);
+  // const totalSupply = await boredApeYachtClub.totalSupply();
+  const addresss = await boredApeYachtClub.address;
+  console.log("this is addresss", addresss, typeof addresss);
+  await generalMarket.addCollection(
+    addresss,
+    2,
+    hre.ethers.utils.parseEther("0.005"),
+    hre.ethers.utils.parseEther("0.01"),
+    2000,
+  );
+  console.log("finished", hre.ethers.utils.parseEther("0.005"));
+
   await generalMarket.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
 };
 

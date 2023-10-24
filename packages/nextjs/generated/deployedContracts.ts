@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         BoredApeYachtClub: {
-          address: "0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00",
+          address: "0xCace1b78160AE76398F486c8a18044da0d66d86D",
           abi: [
             {
               inputs: [],
@@ -627,7 +627,7 @@ const contracts = {
           ],
         },
         GeneralMarket: {
-          address: "0x1291Be112d480055DaFd8a610b7d1e203891C274",
+          address: "0x07882Ae1ecB7429a84f1D53048d35c4bB2056877",
           abi: [
             {
               inputs: [],
@@ -918,6 +918,24 @@ const contracts = {
                   type: "uint256",
                 },
               ],
+              name: "buyNFT",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_collection",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_tokenId",
+                  type: "uint256",
+                },
+              ],
               name: "delist",
               outputs: [],
               stateMutability: "nonpayable",
@@ -1086,6 +1104,40 @@ const contracts = {
               type: "function",
             },
             {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "from",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes",
+                  name: "",
+                  type: "bytes",
+                },
+              ],
+              name: "onERC721Received",
+              outputs: [
+                {
+                  internalType: "bytes4",
+                  name: "",
+                  type: "bytes4",
+                },
+              ],
+              stateMutability: "pure",
+              type: "function",
+            },
+            {
               inputs: [],
               name: "owner",
               outputs: [
@@ -1218,7 +1270,7 @@ const contracts = {
           ],
         },
         MiladyMaker: {
-          address: "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
+          address: "0xD5ac451B0c50B9476107823Af206eD814a2e2580",
           abi: [
             {
               inputs: [],
@@ -1840,7 +1892,7 @@ const contracts = {
           ],
         },
         PuddyPenguine: {
-          address: "0x809d550fca64d94Bd9F66E60752A544199cfAC3D",
+          address: "0xF8e31cb472bc70500f08Cd84917E5A1912Ec8397",
           abi: [
             {
               inputs: [],
@@ -2462,7 +2514,7 @@ const contracts = {
           ],
         },
         YourContract: {
-          address: "0x4c5859f0F772848b2D91F1D83E2Fe57935348029",
+          address: "0xc0F115A19107322cFBf1cDBC7ea011C19EbDB4F8",
           abi: [
             {
               inputs: [

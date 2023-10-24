@@ -43,13 +43,13 @@ export const COLLECTION_COLUMN: ColumnDef<NFTCollection>[] = [
   },
   {
     accessorKey: "volume",
-    header: "Trading Volumn",
+    header: "Trading Volume",
     cell: ({ row }) => {
-      const collectionName = row.getValue("name") as string;
+      const collectionName = row.getValue("volume") as string;
       console.log(collectionName);
       return (
         <div className="flex items-center gap-2">
-          <p>2eth</p>
+          <p>2ETH</p>
         </div>
       );
     },

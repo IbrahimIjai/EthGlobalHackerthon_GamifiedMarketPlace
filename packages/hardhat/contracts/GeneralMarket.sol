@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -14,13 +15,19 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
+contract GeneralMarket is
+	Context,
+	Ownable,
+	Pausable,
+	ReentrancyGuard,
+	IERC721Receiver
+{
 	// State Variables
-	uint32 protocolFee; //normal intergers, not percentage, eg, 10 for 10%
-	uint32 minTradeFees;
-	uint32 maxTradeFees;
+	uint32 protocolFee = 1; //normal intergers, not percentage, eg, 10 for 10%
+	uint32 maxRoyaltyFees = 2; // integer
 	address tradeToken;
 	address revenueCollector;
+	uint256 curPointValue = 0.00060 ether;
 	//variables libraries
 	using EnumerableSet for EnumerableSet.AddressSet;
 	using EnumerableSet for EnumerableSet.UintSet;
@@ -60,7 +67,7 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 	mapping(address => uint256) public userLiqPts;
 
 	//Seller typical activities
-	function list(
+	function list (
 		address _collection,
 		uint256 _tokenId,
 		uint256 _price
@@ -71,6 +78,7 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		isNftOwner(_collection, _tokenId)
 		isNotListed(_collection, _tokenId)
 		isPriceValid(_price, _collection)
+		nonReentrant 
 	{
 		Listing memory listing = Listing(_msgSender(), _price);
 		listedToken[_collection][_tokenId] = listing;
@@ -114,47 +122,71 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		emit listingUpdated(_msgSender(), _collection, _tokenId, _newPrice);
 	}
 
-	//buy
-	function _buyNFT(
+	//buy with native/ether. USDT, AND others will be supported in the future.
+	function buyNFT(
 		address _collection,
-		uint256 _tokenId,
-		uint256 _price,
-		address buyer
-	) private isListed(_collection, _tokenId) {
+		uint256 _tokenId
+	)
+		public
+		payable
+		// address buyer
+		isListed(_collection, _tokenId)
+	{
 		Listing memory listing = listedToken[_collection][_tokenId];
+		uint256 price = listing.price;
 		(
 			uint256 amount,
 			uint256 marketplaceFee,
 			uint256 collectionFee
-		) = feeCompiler(_collection, _price, protocolFee);
-		address seller = listing.seller;
+		) = feeCompiler(_collection, price, protocolFee);
+		
+		require(msg.value > price, "You dont have enough funds");
+
+		//transfer to seller
+		payable(listing.seller).transfer(amount);
+
 		_delist(_collection, _tokenId);
+
+		//track marketplace revenue and collection revenue
 		_updateRevenue(marketplaceFee, collectionFee, _collection);
-		IERC20(tradeToken).safeTransferFrom(
-			_msgSender(),
+		IERC721(_collection).safeTransferFrom(
 			address(this),
-			amount
+			_msgSender(),
+			_tokenId
 		);
-		IERC721(_collection).safeTransferFrom(address(this), buyer, _tokenId);
 		userLiqPts[_msgSender()] += 2;
-		emit NFTSold(seller, _collection, buyer, _tokenId, _price);
+		emit NFTSold(
+			listing.seller,
+			_collection,
+			_msgSender(),
+			_tokenId,
+			msg.value
+		);
 	}
 
 	function liquidateNft(
 		address _collection,
 		uint256 _tokenId
-	) private isListed(_collection, _tokenId) isNftOwner(_collection, _tokenId) {
-		
+	)
+		private
+		isListed(_collection, _tokenId)
+		isNftOwner(_collection, _tokenId)
+	{
 		uint256 minLiquidationPoint = collection[_collection].minLiquidatePoint;
-		require(userLiqPts[_msgSender()] > minLiquidationPoint, "not enough points");
-		IERC721(_collection).safeTransferFrom(_msgSender(), address(this), _tokenId );
+		require(
+			userLiqPts[_msgSender()] > minLiquidationPoint,
+			"not enough points"
+		);
+		IERC721(_collection).safeTransferFrom(
+			_msgSender(),
+			address(this),
+			_tokenId
+		);
 		userLiqPts[_msgSender()] -= minLiquidationPoint;
-			//function calculate value of points
+		//function calculate value of points
 		// IERC20(_MMCToken).transfer()
 		emit NFTLiquidated(_msgSender(), _collection, _tokenId);
 	}
-
-
 
 	//admin only
 
@@ -170,11 +202,7 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 			IERC721(_collectionAddress).supportsInterface(0x80ac58cd),
 			"not supported"
 		);
-		require(
-			_royaltyFees >= minTradeFees &&
-				_royaltyFees <= (maxTradeFees - protocolFee),
-			"error inputing fees"
-		);
+		require(_royaltyFees <= maxRoyaltyFees, "error inputing fees");
 		collections.add(_collectionAddress);
 		collection[_collectionAddress] = Collection(
 			_collectionAddress,
@@ -184,7 +212,11 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 			_floorPrice,
 			_minLiquidatePoint
 		);
-		emit CollectionAdded(_collectionAddress, _collectionAddress, _royaltyFees);
+		emit CollectionAdded(
+			_collectionAddress,
+			_collectionAddress,
+			_royaltyFees
+		);
 	}
 
 	function updateCollection(
@@ -195,11 +227,7 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		uint256 _floorPrice,
 		uint256 _minLiquidatePoint
 	) external whenNotPaused isSupportedCollection(_collection) onlyOwner {
-		require(
-			_royaltyFees >= minTradeFees &&
-				_royaltyFees <= (maxTradeFees - protocolFee),
-			"error inputing fees"
-		);
+		require(_royaltyFees <= maxRoyaltyFees, "error inputing fees");
 		require(
 			_msgSender() == collection[_collection].collectionAddress,
 			"Only Collection admin can update"
@@ -226,7 +254,14 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 		}
 	}
 
-	//utils
+	//utils and internal
+
+	function getPointsEthValue(
+		uint256 _pointqty
+	) private view returns (uint256 ethvalue) {
+		ethvalue = curPointValue * _pointqty;
+	}
+
 	function feeCompiler(
 		address _collection,
 		uint256 _price,
@@ -330,6 +365,17 @@ contract GeneralMarket is Context, Ownable, Pausable, ReentrancyGuard {
 	modifier isSupportedCollection(address _collection) {
 		require(collections.contains(_collection), "Collection not supported");
 		_;
+	}
+
+	//
+	function onERC721Received(
+		address,
+		address from,
+		uint256,
+		bytes calldata
+	) external pure override returns (bytes4) {
+		// require(from !== address(0x0), "Cannot send nfts to Vault directly");
+		return IERC721Receiver.onERC721Received.selector;
 	}
 
 	// Events
