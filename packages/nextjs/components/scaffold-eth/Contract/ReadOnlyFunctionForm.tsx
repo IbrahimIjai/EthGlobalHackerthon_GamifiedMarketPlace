@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "../../ui/Buttons";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -49,19 +50,18 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">{abiFunction.name}</p>
+      <p className="my-0 font-medium break-words">{abiFunction.name}</p>
       {inputElements}
-      <div className="flex justify-between gap-2 flex-wrap">
+      <div className="flex flex-wrap justify-between gap-2">
         <div className="flex-grow w-4/5">
           {result !== null && result !== undefined && (
             <div className="bg-secondary rounded-3xl text-sm px-4 py-1.5 break-words">
-              <p className="font-bold m-0 mb-1">Result:</p>
-              <pre className="whitespace-pre-wrap break-words">{displayTxResult(result)}</pre>
+              <p className="m-0 mb-1 font-bold">Result:</p>
+              <pre className="break-words whitespace-pre-wrap">{displayTxResult(result)}</pre>
             </div>
           )}
         </div>
-        <button
-          className="btn btn-secondary btn-sm"
+        <Button
           onClick={async () => {
             const { data } = await refetch();
             setResult(data);
@@ -70,7 +70,7 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
         >
           {isFetching && <span className="loading loading-spinner loading-xs"></span>}
           Read 📡
-        </button>
+        </Button>
       </div>
     </div>
   );

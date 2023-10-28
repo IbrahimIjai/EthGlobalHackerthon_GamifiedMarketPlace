@@ -29,6 +29,7 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
   console.log("this is addresss", addresss, typeof addresss);
   await generalMarket.addCollection(
     addresss,
+    "0x422315BB59A9eD6B2323E99353b126cCf8B987AB",
     2,
     hre.ethers.utils.parseEther("0.005"),
     hre.ethers.utils.parseEther("0.01"),

@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         BoredApeYachtClub: {
-          address: "0xCace1b78160AE76398F486c8a18044da0d66d86D",
+          address: "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
           abi: [
             {
               inputs: [],
@@ -627,7 +627,7 @@ const contracts = {
           ],
         },
         GeneralMarket: {
-          address: "0x07882Ae1ecB7429a84f1D53048d35c4bB2056877",
+          address: "0xf5059a5D33d5853360D16C683c16e67980206f36",
           abi: [
             {
               inputs: [],
@@ -953,11 +953,6 @@ const contracts = {
                   name: "_price",
                   type: "uint256",
                 },
-                {
-                  internalType: "uint256",
-                  name: "_protocolFee",
-                  type: "uint256",
-                },
               ],
               name: "feeCompiler",
               outputs: [
@@ -974,6 +969,11 @@ const contracts = {
                 {
                   internalType: "uint256",
                   name: "collectionFee",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "savings",
                   type: "uint256",
                 },
               ],
@@ -1078,6 +1078,24 @@ const contracts = {
                 },
               ],
               stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_collection",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_tokenId",
+                  type: "uint256",
+                },
+              ],
+              name: "liquidateNft",
+              outputs: [],
+              stateMutability: "nonpayable",
               type: "function",
             },
             {
@@ -1270,7 +1288,7 @@ const contracts = {
           ],
         },
         MiladyMaker: {
-          address: "0xD5ac451B0c50B9476107823Af206eD814a2e2580",
+          address: "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
           abi: [
             {
               inputs: [],
@@ -1892,7 +1910,7 @@ const contracts = {
           ],
         },
         PuddyPenguine: {
-          address: "0xF8e31cb472bc70500f08Cd84917E5A1912Ec8397",
+          address: "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8",
           abi: [
             {
               inputs: [],
@@ -2514,7 +2532,7 @@ const contracts = {
           ],
         },
         YourContract: {
-          address: "0xc0F115A19107322cFBf1cDBC7ea011C19EbDB4F8",
+          address: "0x851356ae760d987E095750cCeb3bC6014560891C",
           abi: [
             {
               inputs: [

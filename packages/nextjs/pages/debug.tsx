@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import { useLocalStorage } from "usehooks-ts";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { ContractUI } from "~~/components/scaffold-eth";
+import { Button } from "~~/components/ui/Buttons";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
@@ -35,15 +36,13 @@ const Debug: NextPage = () => {
             {contractNames.length > 1 && (
               <div className="flex flex-row flex-wrap w-full gap-2 px-6 pb-1 max-w-7xl lg:px-10">
                 {contractNames.map(contractName => (
-                  <button
-                    className={`btn btn-secondary btn-sm normal-case font-thin ${
-                      contractName === selectedContract ? "muted" : "bg-muted/60"
-                    }`}
+                  <Button
+                    variant={`${contractName === selectedContract ? "default" : "outline"}`}
                     key={contractName}
                     onClick={() => setSelectedContract(contractName)}
                   >
                     {contractName}
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}

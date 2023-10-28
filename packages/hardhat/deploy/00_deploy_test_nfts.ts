@@ -40,12 +40,9 @@ const deployYourToken: DeployFunction = async function (hre: HardhatRuntimeEnvir
     log: true,
     autoMine: true,
   });
-  // const boredApeYachtClub = await hre.ethers.getContract("BoredApeYachtClub", deployer);
+  const boredApeYachtClub = await hre.ethers.getContract("BoredApeYachtClub", deployer);
+  boredApeYachtClub.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
   console.log("moving forward...");
-  // await boredApeYachtClub.mint("0xce6E00103F6a0e804e0caF4cE0D128afa95820E9", 5);
-
-  // const totalSupply = await boredApeYachtClub.totalSupply();
-  // console.log("this is totalSupply", totalSupply.toString());
 };
 
 export default deployYourToken;

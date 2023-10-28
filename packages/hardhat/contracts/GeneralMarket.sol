@@ -15,6 +15,14 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+interface IWETH {
+	function deposit() external payable;
+
+	function transfer(address to, uint256 value) external returns (bool);
+
+	function withdraw(uint256) external;
+}
+
 contract GeneralMarket is
 	Context,
 	Ownable,
@@ -28,6 +36,7 @@ contract GeneralMarket is
 	address tradeToken;
 	address revenueCollector;
 	uint256 curPointValue = 0.00060 ether;
+	address public immutable WETH9;
 	//variables libraries
 	using EnumerableSet for EnumerableSet.AddressSet;
 	using EnumerableSet for EnumerableSet.UintSet;
@@ -39,7 +48,9 @@ contract GeneralMarket is
 		verified
 	}
 
-	constructor() {}
+	constructor(address _WETH9) {
+		WETH9 = _WETH9;
+	}
 
 	struct Listing {
 		address seller;
@@ -47,6 +58,7 @@ contract GeneralMarket is
 	}
 	struct Collection {
 		address collectionAddress;
+		address contractOwner;
 		uint256 royaltyFees; //normal intergers, not percentage, eg, 10 for 10%
 		uint256 minPrice;
 		collectionStatus status;
@@ -67,7 +79,8 @@ contract GeneralMarket is
 	mapping(address => uint256) public userLiqPts;
 
 	//Seller typical activities
-	function list (
+
+	function list(
 		address _collection,
 		uint256 _tokenId,
 		uint256 _price
@@ -78,7 +91,7 @@ contract GeneralMarket is
 		isNftOwner(_collection, _tokenId)
 		isNotListed(_collection, _tokenId)
 		isPriceValid(_price, _collection)
-		nonReentrant 
+		nonReentrant
 	{
 		Listing memory listing = Listing(_msgSender(), _price);
 		listedToken[_collection][_tokenId] = listing;
@@ -91,7 +104,7 @@ contract GeneralMarket is
 		emit NFTListed(_msgSender(), _collection, _tokenId, _price);
 	}
 
-	function delist(
+	function cancelListing(
 		address _collection,
 		uint256 _tokenId
 	) public isListed(_collection, _tokenId) whenNotPaused {
@@ -111,66 +124,43 @@ contract GeneralMarket is
 		address _collection,
 		uint256 _tokenId,
 		uint256 _newPrice
-	)
-		external
-		isListed(_collection, _tokenId)
-		whenNotPaused
-		isNftOwner(_collection, _tokenId)
-	{
+	) external isListed(_collection, _tokenId) whenNotPaused {
+		require(
+			_msgSender() == listedToken[_collection][_tokenId].seller,
+			"you didnt list this"
+		);
 		Listing memory listing = Listing(_msgSender(), _newPrice);
 		listedToken[_collection][_tokenId] = listing;
 		emit listingUpdated(_msgSender(), _collection, _tokenId, _newPrice);
 	}
 
-	//buy with native/ether. USDT, AND others will be supported in the future.
-	function buyNFT(
+	function buyWithEth(
 		address _collection,
 		uint256 _tokenId
-	)
-		public
-		payable
-		// address buyer
-		isListed(_collection, _tokenId)
-	{
-		Listing memory listing = listedToken[_collection][_tokenId];
-		uint256 price = listing.price;
-		(
-			uint256 amount,
-			uint256 marketplaceFee,
-			uint256 collectionFee
-		) = feeCompiler(_collection, price, protocolFee);
-		
-		require(msg.value > price, "You dont have enough funds");
+	) external payable nonReentrant {
+		//deposite via msg.value
+		IWETH(WETH9).deposit{ value: msg.value }();
+		_buy(_collection, _tokenId, msg.value);
+	}
 
-		//transfer to seller
-		payable(listing.seller).transfer(amount);
-
-		_delist(_collection, _tokenId);
-
-		//track marketplace revenue and collection revenue
-		_updateRevenue(marketplaceFee, collectionFee, _collection);
-		IERC721(_collection).safeTransferFrom(
-			address(this),
-			_msgSender(),
-			_tokenId
-		);
-		userLiqPts[_msgSender()] += 2;
-		emit NFTSold(
-			listing.seller,
-			_collection,
-			_msgSender(),
-			_tokenId,
-			msg.value
-		);
+	function buyWithWEth9(
+		address _collection,
+		uint256 _tokenId,
+		uint256 _price
+	) external payable nonReentrant {
+		//deposit safetransferfrom
+		IERC20(WETH9).safeTransferFrom(_msgSender(), address(this), _price);
+		_buy(_collection, _tokenId, _price);
 	}
 
 	function liquidateNft(
 		address _collection,
 		uint256 _tokenId
 	)
-		private
+		public
 		isListed(_collection, _tokenId)
 		isNftOwner(_collection, _tokenId)
+		nonReentrant
 	{
 		uint256 minLiquidationPoint = collection[_collection].minLiquidatePoint;
 		require(
@@ -192,6 +182,7 @@ contract GeneralMarket is
 
 	function addCollection(
 		address _collectionAddress,
+		address _contractOwner,
 		uint256 _royaltyFees,
 		uint256 _minListing,
 		uint256 _floorPrice,
@@ -206,6 +197,7 @@ contract GeneralMarket is
 		collections.add(_collectionAddress);
 		collection[_collectionAddress] = Collection(
 			_collectionAddress,
+			_contractOwner,
 			_royaltyFees,
 			_minListing,
 			collectionStatus.verified,
@@ -221,7 +213,7 @@ contract GeneralMarket is
 
 	function updateCollection(
 		address _collection,
-		address _collectionAddress,
+		address _contractowner,
 		uint256 _royaltyFees,
 		uint256 _minListing,
 		uint256 _floorPrice,
@@ -233,14 +225,15 @@ contract GeneralMarket is
 			"Only Collection admin can update"
 		);
 		collection[_collection] = Collection(
-			_collectionAddress,
+			_collection,
+			_contractowner,
 			_royaltyFees,
 			_minListing,
 			collectionStatus.verified,
 			_floorPrice,
 			_minLiquidatePoint
 		);
-		emit CollectionUpdated(_collection, _collectionAddress, _royaltyFees);
+		emit CollectionUpdated(_collection, _contractowner, _royaltyFees);
 	}
 
 	//shared functions
@@ -256,6 +249,49 @@ contract GeneralMarket is
 
 	//utils and internal
 
+	function _buy(
+		address _collection,
+		uint256 _tokenId,
+		uint256 _price
+	) internal isListed(_collection, _tokenId) {
+		Listing memory listing = listedToken[_collection][_tokenId];
+
+		require(_msgSender() != listing.seller, "Seller cannot be Buyer");
+		require(_price == listing.price, "Incorrect price");
+
+		(
+			uint256 amount,
+			uint256 marketplaceFee,
+			uint256 collectionFee,
+			uint savings
+		) = feeCompiler(_collection, listing.price);
+
+		console.log("this is buy", amount, savings);
+
+		_delist(_collection, _tokenId);
+
+		//transfer to the seller
+		IERC20(WETH9).safeTransfer(listing.seller, amount);
+
+		//track marketplace revenue and collection revenue
+		_updateRevenue(marketplaceFee, collectionFee, _collection);
+
+		IERC721(_collection).safeTransferFrom(
+			address(this),
+			_msgSender(),
+			_tokenId
+		);
+
+		userLiqPts[_msgSender()] += 2;
+		emit NFTSold(
+			listing.seller,
+			_collection,
+			_msgSender(),
+			_tokenId,
+			listing.price
+		);
+	}
+
 	function getPointsEthValue(
 		uint256 _pointqty
 	) private view returns (uint256 ethvalue) {
@@ -264,16 +300,21 @@ contract GeneralMarket is
 
 	function feeCompiler(
 		address _collection,
-		uint256 _price,
-		uint256 _protocolFee
+		uint256 _price
 	)
 		public
 		view
-		returns (uint256 amount, uint256 marketplaceFee, uint256 collectionFee)
+		returns (
+			uint256 amount,
+			uint256 marketplaceFee,
+			uint256 collectionFee,
+			uint256 savings
+		)
 	{
-		marketplaceFee = (_price * _protocolFee) / 100;
+		marketplaceFee = (_price * protocolFee) / 100;
 		collectionFee = (_price * collection[_collection].royaltyFees) / 100;
-		amount = _price - (marketplaceFee + collectionFee);
+		savings = (_price * 5) / 100;
+		amount = _price - (marketplaceFee + collectionFee + savings);
 	}
 
 	function _updateRevenue(
