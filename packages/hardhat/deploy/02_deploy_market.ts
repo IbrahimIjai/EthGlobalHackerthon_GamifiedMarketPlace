@@ -11,10 +11,12 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
+  const weth9 = await hre.ethers.getContract("WETH9", deployer);
+
   await deploy("GeneralMarket", {
     from: deployer,
     // Contract constructor arguments
-    args: [],
+    args: [weth9.address],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -36,6 +38,7 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
     2000,
   );
   console.log("finished", hre.ethers.utils.parseEther("0.005"));
+  console.log("this deployer", deployer);
 
   await generalMarket.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
 };

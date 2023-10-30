@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         BoredApeYachtClub: {
-          address: "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
+          address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
           abi: [
             {
               inputs: [],
@@ -627,10 +627,16 @@ const contracts = {
           ],
         },
         GeneralMarket: {
-          address: "0xf5059a5D33d5853360D16C683c16e67980206f36",
+          address: "0x68B1D87F95878fE05B998F19b66F4baba5De1aed",
           abi: [
             {
-              inputs: [],
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_WETH9",
+                  type: "address",
+                },
+              ],
               stateMutability: "nonpayable",
               type: "constructor",
             },
@@ -873,10 +879,28 @@ const contracts = {
               type: "event",
             },
             {
+              inputs: [],
+              name: "WETH9",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "address",
                   name: "_collectionAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "_contractOwner",
                   type: "address",
                 },
                 {
@@ -918,7 +942,30 @@ const contracts = {
                   type: "uint256",
                 },
               ],
-              name: "buyNFT",
+              name: "buyWithEth",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_collection",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_tokenId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_price",
+                  type: "uint256",
+                },
+              ],
+              name: "buyWithWEth9",
               outputs: [],
               stateMutability: "payable",
               type: "function",
@@ -936,7 +983,7 @@ const contracts = {
                   type: "uint256",
                 },
               ],
-              name: "delist",
+              name: "cancelListing",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
@@ -995,6 +1042,11 @@ const contracts = {
                     {
                       internalType: "address",
                       name: "collectionAddress",
+                      type: "address",
+                    },
+                    {
+                      internalType: "address",
+                      name: "contractOwner",
                       type: "address",
                     },
                     {
@@ -1210,7 +1262,7 @@ const contracts = {
                 },
                 {
                   internalType: "address",
-                  name: "_collectionAddress",
+                  name: "_contractowner",
                   type: "address",
                 },
                 {
@@ -1288,7 +1340,7 @@ const contracts = {
           ],
         },
         MiladyMaker: {
-          address: "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
+          address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
           abi: [
             {
               inputs: [],
@@ -1910,7 +1962,7 @@ const contracts = {
           ],
         },
         PuddyPenguine: {
-          address: "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8",
+          address: "0x9A676e781A523b5d0C0e43731313A708CB607508",
           abi: [
             {
               inputs: [],
@@ -2531,8 +2583,297 @@ const contracts = {
             },
           ],
         },
+        WETH9: {
+          address: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+          abi: [
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "src",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "guy",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "Approval",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "dst",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "Deposit",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "src",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "dst",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "Transfer",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "src",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "Withdrawal",
+              type: "event",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              name: "allowance",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "guy",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "approve",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              name: "balanceOf",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "decimals",
+              outputs: [
+                {
+                  internalType: "uint8",
+                  name: "",
+                  type: "uint8",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "deposit",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "name",
+              outputs: [
+                {
+                  internalType: "string",
+                  name: "",
+                  type: "string",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "symbol",
+              outputs: [
+                {
+                  internalType: "string",
+                  name: "",
+                  type: "string",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "totalSupply",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "dst",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "transfer",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "src",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "dst",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "transferFrom",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "wad",
+                  type: "uint256",
+                },
+              ],
+              name: "withdraw",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              stateMutability: "payable",
+              type: "receive",
+            },
+          ],
+        },
         YourContract: {
-          address: "0x851356ae760d987E095750cCeb3bC6014560891C",
+          address: "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
           abi: [
             {
               inputs: [

@@ -2634,6 +2634,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
+    "@ethersproject/address": ^5.7.0
     "@ethersproject/providers": ^5.7.2
     "@heroicons/react": ^2.0.11
     "@radix-ui/react-avatar": ^1.0.4

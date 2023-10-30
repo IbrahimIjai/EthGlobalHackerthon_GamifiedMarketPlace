@@ -16,11 +16,17 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 interface IWETH {
-	function deposit() external payable;
-
-	function transfer(address to, uint256 value) external returns (bool);
-
-	function withdraw(uint256) external;
+	function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
+    function decimals() external view returns (uint8);
+    function balanceOf(address account) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
+    function totalSupply() external view returns (uint);
+    function deposit() external payable;
+    function withdraw(uint wad) external;
+    function approve(address guy, uint wad) external returns (bool);
+    function transfer(address dst, uint wad) external returns (bool);
+    function transferFrom(address src, address dst, uint wad) external returns (bool);
 }
 
 contract GeneralMarket is
@@ -30,6 +36,11 @@ contract GeneralMarket is
 	ReentrancyGuard,
 	IERC721Receiver
 {
+
+	//FIXES
+	// Max royalty fees, protocol fees...(avoid fractions)
+	
+
 	// State Variables
 	uint32 protocolFee = 1; //normal intergers, not percentage, eg, 10 for 10%
 	uint32 maxRoyaltyFees = 2; // integer
@@ -143,13 +154,14 @@ contract GeneralMarket is
 		_buy(_collection, _tokenId, msg.value);
 	}
 
+	//always check weth contract for safeTransferFrom Function
 	function buyWithWEth9(
 		address _collection,
 		uint256 _tokenId,
-		uint256 _price
-	) external payable nonReentrant {
+		uint _price
+	) external nonReentrant {
 		//deposit safetransferfrom
-		IERC20(WETH9).safeTransferFrom(_msgSender(), address(this), _price);
+		IERC20(WETH9).transferFrom(_msgSender(), address(this), _price);
 		_buy(_collection, _tokenId, _price);
 	}
 
@@ -193,7 +205,7 @@ contract GeneralMarket is
 			IERC721(_collectionAddress).supportsInterface(0x80ac58cd),
 			"not supported"
 		);
-		require(_royaltyFees <= maxRoyaltyFees, "error inputing fees");
+		require(_royaltyFees <= maxRoyaltyFees, " royalty fees should be less than or equal to maxRoyaltyFees");
 		collections.add(_collectionAddress);
 		collection[_collectionAddress] = Collection(
 			_collectionAddress,
@@ -356,7 +368,6 @@ contract GeneralMarket is
 	) public view returns (Collection memory) {
 		return collection[_collection];
 	}
-
 	receive() external payable {}
 
 	//modifiers

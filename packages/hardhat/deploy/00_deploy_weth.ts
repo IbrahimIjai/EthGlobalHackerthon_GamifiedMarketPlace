@@ -1,4 +1,3 @@
-
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
@@ -9,7 +8,6 @@ import { DeployFunction } from "hardhat-deploy/types";
  * @param hre HardhatRuntimeEnvironment object.
  */
 const deployYourToken: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
@@ -20,9 +18,8 @@ const deployYourToken: DeployFunction = async function (hre: HardhatRuntimeEnvir
     autoMine: true,
   });
 
-
+  console.log("this deployer", deployer);
   console.log("moving forward...");
-  
 };
 
 export default deployYourToken;
