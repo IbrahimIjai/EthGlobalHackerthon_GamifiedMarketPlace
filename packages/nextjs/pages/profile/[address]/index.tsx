@@ -1,5 +1,6 @@
 import React from "react";
 import ProfileHeader from "~~/modules/profile/Header";
+import MobileFilters from "~~/modules/profile/MobileFilters";
 
 //fetch user listed nfts
 //fetch user owned nfts
@@ -7,9 +8,12 @@ import ProfileHeader from "~~/modules/profile/Header";
 export default function Profile() {
   return (
     <div>
-      {<div>
-        <ProfileHeader />
-      </div>}
+      {
+        <div>
+          <ProfileHeader />
+          <MobileFilters />
+        </div>
+      }
     </div>
   );
 }

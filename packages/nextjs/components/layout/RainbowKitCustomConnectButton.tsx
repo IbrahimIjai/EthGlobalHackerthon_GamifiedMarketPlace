@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { Button } from "../ui/Buttons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 // import { QRCodeSVG } from "qrcode.react";
@@ -46,6 +47,7 @@ import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold
  */
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
+  const router = useRouter();
   const networkColor = useNetworkColor();
   const configuredNetwork = getTargetNetwork();
   const { disconnect } = useDisconnect();
@@ -174,7 +176,10 @@ export const RainbowKitCustomConnectButton = () => {
                         <ArrowRightIcon className="w-4 h-6 ml-2 sm:ml-0" />
                       </DropdownMenuItem>
 
-                      <DropdownMenuItem className="flex items-center justify-between w-full p-2 font-bold">
+                      <DropdownMenuItem
+                        onClick={() => router.push(`/profile/${account.address}`)}
+                        className="flex items-center justify-between w-full p-2 font-bold"
+                      >
                         <div className="flex items-center justify-between gap-2">
                           <UserIcon className="w-4 h-6 ml-2 sm:ml-0" />
                           <span>Profile</span>

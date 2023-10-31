@@ -40,7 +40,7 @@ const deployGeneralMarket: DeployFunction = async function (hre: HardhatRuntimeE
   console.log("finished", hre.ethers.utils.parseEther("0.005"));
   console.log("this deployer", deployer);
 
-  await generalMarket.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
+  // await generalMarket.transferOwnership("0x422315BB59A9eD6B2323E99353b126cCf8B987AB");
 };
 
 export default deployGeneralMarket;
