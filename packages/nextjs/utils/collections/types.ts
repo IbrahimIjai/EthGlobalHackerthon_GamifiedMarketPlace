@@ -10,7 +10,7 @@ export interface NFTCollection {
   tokens: NFTToken[];
 }
 
-interface NFTToken {
+export interface NFTToken {
   description?: string;
   image: string;
   name?: string;
