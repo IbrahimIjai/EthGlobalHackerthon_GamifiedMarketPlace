@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Filters from "./Filters";
 import { ChevronDown, RefreshCcw } from "lucide-react";
 import { NFTCombobox } from "~~/components/NFTComboBox";
-import { Button } from "~~/components/ui/Buttons";
+import { Button, buttonVariants } from "~~/components/ui/Buttons";
 import { Checkbox } from "~~/components/ui/Checkbox";
 import {
   DropdownMenu,
@@ -13,14 +13,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~~/components/ui/DropdownMenu";
+import { Input } from "~~/components/ui/Input";
 import { Label } from "~~/components/ui/Label";
+import { RadioGroup, RadioGroupItem } from "~~/components/ui/RadioGroup";
 import { ScrollArea } from "~~/components/ui/ScrollArea";
 import { Separator } from "~~/components/ui/Seperator";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "~~/components/ui/Sheets";
-import { sortOptions } from "~~/config/collections";
+import { Slider } from "~~/components/ui/Slider";
+import { sortOptions, sortStatus } from "~~/config/collections";
 import { useDebounce } from "~~/hooks/use-debounce";
 import { collections } from "~~/utils/collections";
-import { Input } from "~~/components/ui/Input";
 
 export default function NFTLists() {
   const [isPending, startTransition] = React.useTransition();
@@ -44,7 +46,10 @@ export default function NFTLists() {
     },
     [query],
   );
-  // const debouncedPrice = useDebounce(priceRange, 500)
+
+  //price filter
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 500]);
+  const debouncedPrice = useDebounce(priceRange, 500);
 
   // React.useEffect(() => {
   //   const [min, max] = debouncedPrice
@@ -104,28 +109,44 @@ export default function NFTLists() {
   // )
   return (
     <div>
-      <div className="flex items-center w-full space-x-2">
+      <div className="flex flex-wrap lg:flex-nowrap items-center w-full space-x-2">
+        <NFTCombobox />
         <Sheet>
           <SheetTrigger asChild>
             <Button aria-label="Filter products" size="sm" disabled={isPending}>
               Filter
             </Button>
           </SheetTrigger>
-          <SheetContent className="flex flex-col">
-            <SheetHeader className="px-1 bg-red-600">
+          <SheetContent className="flex flex-col py-12 gap-8 lg:gap-2">
               <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
             <Separator />
             <div>
-            <h3 className="text-sm font-medium tracking-wide text-foreground">
-                  Status
-                </h3>
+              <h3 className="text-sm my-4 font-medium tracking-wide text-foreground">NFTs Status</h3>
+              {sortStatus?.length > 0 && (
+                <RadioGroup defaultValue="show all" className="flex font-bold border-accent">
+                  {sortStatus.map((status, i) => (
+                    <div key={i} className="flex items-center space-x-2">
+                      <div>
+                        <RadioGroupItem value={status.label} id={status.label} className="sr-only peer" />
+                        <Label
+                          htmlFor={status.label}
+                          className={buttonVariants({
+                            variant: "outline",
+                            className: " peer-data-[state=checked]:bg-primary cursor-pointer",
+                          })}
+                        >
+                          {status.label}
+                        </Label>
+                      </div>
+                    </div>
+                  ))}
+                </RadioGroup>
+              )}
             </div>
-            <div className="flex flex-col flex-1 gap-5 px-1 overflow-hidden">
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium tracking-wide text-foreground">
-                  Price range ($)
-                </h3>
+            <Separator />
+            <div className="flex flex-col  gap-5 px-1 overflow-hidden">
+              <div className="space-y-4 flex flex-col gap-6">
+                <h3 className="text-sm font-medium tracking-wide text-foreground">Price range ($)</h3>
                 <Slider
                   variant="range"
                   thickness="thin"
@@ -133,9 +154,7 @@ export default function NFTLists() {
                   max={500}
                   step={1}
                   value={priceRange}
-                  onValueChange={(value: typeof priceRange) =>
-                    setPriceRange(value)
-                  }
+                  onValueChange={(value: typeof priceRange) => setPriceRange(value)}
                 />
                 <div className="flex items-center space-x-4">
                   <Input
@@ -145,9 +164,9 @@ export default function NFTLists() {
                     max={priceRange[1]}
                     className="h-9"
                     value={priceRange[0]}
-                    onChange={(e) => {
-                      const value = Number(e.target.value)
-                      setPriceRange([value, priceRange[1]])
+                    onChange={e => {
+                      const value = Number(e.target.value);
+                      setPriceRange([value, priceRange[1]]);
                     }}
                   />
                   <span className="text-muted-foreground">-</span>
@@ -158,14 +177,14 @@ export default function NFTLists() {
                     max={500}
                     className="h-9"
                     value={priceRange[1]}
-                    onChange={(e) => {
-                      const value = Number(e.target.value)
-                      setPriceRange([priceRange[0], value])
+                    onChange={e => {
+                      const value = Number(e.target.value);
+                      setPriceRange([priceRange[0], value]);
                     }}
                   />
                 </div>
               </div>
-              {categories?.length ? (
+              {/* {categories?.length ? (
                 <div className="space-y-4">
                   <h3 className="text-sm font-medium tracking-wide text-foreground">
                     Categories
@@ -277,15 +296,16 @@ export default function NFTLists() {
                     </div>
                   </ScrollArea>
                 </div>
-              ) : null}
+              ) : null} */}
             </div>
-            <div className="flex flex-col flex-1 gap-5 px-1 overflow-hidden">
+            <Separator />
+            <div className="flex flex-col gap-5 px-1 overflow-hidden">
               {collections?.length > 0 && (
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <h3 className="flex-1 text-sm font-medium tracking-wide text-foreground">Collections</h3>
                   </div>
-                  <ScrollArea className="min-h-[calc(100%-10rem)]">
+                  <ScrollArea className="">
                     <div className="space-y-4">
                       {collections.map(collection => (
                         <div key={collection.symbol} className="flex items-center space-x-2">
@@ -315,36 +335,35 @@ export default function NFTLists() {
                 </div>
               )}
             </div>
-            <div>
-              <Separator className="my-4" />
-              <SheetFooter>
-                <Button
-                  aria-label="Clear filters"
-                  size="sm"
-                  className="w-full"
-                  // onClick={() => {
-                  //   startTransition(() => {
-                  //     router.push(
-                  //       `${pathname}?${createQueryString({
-                  //         price_range: 0 - 100,
-                  //         store_ids: null,
-                  //         categories: null,
-                  //         subcategories: null,
-                  //       })}`,
-                  //     );
+            <Separator className="my-4" />
+            {/* <SheetFooter> */}
+              <Button
+                // aria-label="Clear filters"
+                // size="sm"
+                className="w-full"
+                variant="default"
+                // onClick={() => {
+                //   startTransition(() => {
+                //     router.push(
+                //       `${pathname}?${createQueryString({
+                //         price_range: 0 - 100,
+                //         store_ids: null,
+                //         categories: null,
+                //         subcategories: null,
+                //       })}`,
+                //     );
 
-                  //     setPriceRange([0, 100]);
-                  //     setSelectedCategories(null);
-                  //     setSelectedSubcategories(null);
-                  //     setStoreIds(null);
-                  //   });
-                  // }}
-                  disabled={isPending}
-                >
-                  Clear Filters
-                </Button>
-              </SheetFooter>
-            </div>
+                //     setPriceRange([0, 100]);
+                //     setSelectedCategories(null);
+                //     setSelectedSubcategories(null);
+                //     setStoreIds(null);
+                //   });
+                // }}
+                // disabled={isPending}
+              >
+                Clear Filters
+              </Button>
+            {/* </SheetFooter> */}
           </SheetContent>
         </Sheet>
         <DropdownMenu>
@@ -379,7 +398,7 @@ export default function NFTLists() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <NFTCombobox />
+
         <Button variant="outline">
           <RefreshCcw className="w-4 h-4 ml-2" />
         </Button>

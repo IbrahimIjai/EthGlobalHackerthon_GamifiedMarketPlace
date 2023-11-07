@@ -88,7 +88,11 @@ export function NFTCombobox() {
 
   return (
     <>
-      <Button variant="outline" className="relative justify-start w-full p-0 h-9" onClick={() => setIsOpen(true)}>
+      <Button
+        variant="outline"
+        className="relative my-4 lg:my-0 justify-start py-2 w-full px-4 gap-4 h-9"
+        onClick={() => setIsOpen(true)}
+      >
         <Search className="w-4 h-4 mr-2" aria-hidden="true" />
         <span className="inline-flex mr-2">Search Specific NFT...</span>
         <span className="sr-only">Search products</span>
