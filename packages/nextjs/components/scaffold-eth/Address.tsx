@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Skeleton } from "../ui/Skeleton";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { isAddress } from "viem";
 import { useEnsAvatar, useEnsName } from "wagmi";
@@ -54,11 +55,9 @@ export const Address = ({ address, disableAddressLink, format, size = "base", ha
   // Skeleton UI
   if (!address) {
     return (
-      <div className="animate-pulse flex space-x-4">
-        <div className="rounded-md bg-slate-300 h-6 w-6"></div>
-        <div className="flex items-center space-y-6">
-          <div className="h-2 w-28 bg-slate-300 rounded"></div>
-        </div>
+      <div className="flex space-x-4 animate-pulse">
+        <Skeleton className="w-6 h-6" />
+        <Skeleton className="h-4 w-28" />
       </div>
     );
   }

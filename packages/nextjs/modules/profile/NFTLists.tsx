@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import Filters from "./Filters";
 import { ChevronDown, RefreshCcw } from "lucide-react";
+import CollectionNfts from "~~/components/CollectionNfts";
 import { NFTCombobox } from "~~/components/NFTComboBox";
 import { Button, buttonVariants } from "~~/components/ui/Buttons";
 import { Checkbox } from "~~/components/ui/Checkbox";
@@ -109,7 +110,7 @@ export default function NFTLists() {
   // )
   return (
     <div>
-      <div className="flex flex-wrap lg:flex-nowrap items-center w-full space-x-2">
+      <div className="flex flex-wrap items-center w-full space-x-2 lg:flex-nowrap">
         <NFTCombobox />
         <Sheet>
           <SheetTrigger asChild>
@@ -117,11 +118,11 @@ export default function NFTLists() {
               Filter
             </Button>
           </SheetTrigger>
-          <SheetContent className="flex flex-col py-12 gap-8 lg:gap-2">
-              <SheetTitle>Filters</SheetTitle>
+          <SheetContent className="flex flex-col gap-8 py-12 lg:gap-2">
+            <SheetTitle>Filters</SheetTitle>
             <Separator />
             <div>
-              <h3 className="text-sm my-4 font-medium tracking-wide text-foreground">NFTs Status</h3>
+              <h3 className="my-4 text-sm font-medium tracking-wide text-foreground">NFTs Status</h3>
               {sortStatus?.length > 0 && (
                 <RadioGroup defaultValue="show all" className="flex font-bold border-accent">
                   {sortStatus.map((status, i) => (
@@ -144,8 +145,8 @@ export default function NFTLists() {
               )}
             </div>
             <Separator />
-            <div className="flex flex-col  gap-5 px-1 overflow-hidden">
-              <div className="space-y-4 flex flex-col gap-6">
+            <div className="flex flex-col gap-5 px-1 overflow-hidden">
+              <div className="flex flex-col gap-6 space-y-4">
                 <h3 className="text-sm font-medium tracking-wide text-foreground">Price range ($)</h3>
                 <Slider
                   variant="range"
@@ -337,32 +338,32 @@ export default function NFTLists() {
             </div>
             <Separator className="my-4" />
             {/* <SheetFooter> */}
-              <Button
-                // aria-label="Clear filters"
-                // size="sm"
-                className="w-full"
-                variant="default"
-                // onClick={() => {
-                //   startTransition(() => {
-                //     router.push(
-                //       `${pathname}?${createQueryString({
-                //         price_range: 0 - 100,
-                //         store_ids: null,
-                //         categories: null,
-                //         subcategories: null,
-                //       })}`,
-                //     );
+            <Button
+              // aria-label="Clear filters"
+              // size="sm"
+              className="w-full"
+              variant="default"
+              // onClick={() => {
+              //   startTransition(() => {
+              //     router.push(
+              //       `${pathname}?${createQueryString({
+              //         price_range: 0 - 100,
+              //         store_ids: null,
+              //         categories: null,
+              //         subcategories: null,
+              //       })}`,
+              //     );
 
-                //     setPriceRange([0, 100]);
-                //     setSelectedCategories(null);
-                //     setSelectedSubcategories(null);
-                //     setStoreIds(null);
-                //   });
-                // }}
-                // disabled={isPending}
-              >
-                Clear Filters
-              </Button>
+              //     setPriceRange([0, 100]);
+              //     setSelectedCategories(null);
+              //     setSelectedSubcategories(null);
+              //     setStoreIds(null);
+              //   });
+              // }}
+              // disabled={isPending}
+            >
+              Clear Filters
+            </Button>
             {/* </SheetFooter> */}
           </SheetContent>
         </Sheet>
@@ -403,6 +404,7 @@ export default function NFTLists() {
           <RefreshCcw className="w-4 h-4 ml-2" />
         </Button>
       </div>
+      <CollectionNfts />
     </div>
   );
 }

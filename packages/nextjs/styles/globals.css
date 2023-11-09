@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -26,7 +25,7 @@
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.75rem;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -50,18 +49,21 @@
   }
 }
 
+.easyTransition {
+  @apply transition-all ease-in-out;
+  transition-duration: 600ms;
+}
+
 h1,
 h2,
 h3,
 h4 {
-
 }
-.title_h1{
-  @apply whitespace-nowrap  font-bold text-3xl;
+.title_h1 {
+  @apply text-3xl font-bold whitespace-nowrap;
 }
 
 p {
- 
 }
 
 @layer base {
@@ -80,7 +82,7 @@ p {
   -webkit-backdrop-filter: blur(8.9px);
   border: 1px solid rgba(46, 49, 57, 0.3);
 }
-.easytransition{
+.easytransition {
   @apply transition-all ease-in-out;
   transition-duration: 1200ms;
 }

@@ -44,7 +44,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         >
           <div className="relative">
             <Header />
-            <main className="mx-4 lg:mx-6 pt-[60px]">
+            <main className="pt-[70px] overflow-x-hidden">
               <Component {...pageProps} />
             </main>
             <Footer />
